@@ -1,5 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+'''
+    script.skin.helper.skinbackup
+    Kodi addon to backup skin settings
+'''
+
 import xbmc
 import xbmcvfs
 import xbmcgui
@@ -9,7 +15,7 @@ from utils import recursive_delete_dir, get_clean_image, normalize_string
 from utils import zip_tofile, unzip_fromfile
 from dialogselect import DialogSelect
 from xml.dom.minidom import parse
-from datetime import timedelta, datetime
+from datetime import datetime
 import os
 
 
@@ -92,9 +98,9 @@ class BackupRestore:
                 # copy skinshortcuts preferences
                 self.restore_skinshortcuts(temp_path)
                 # restore any custom skin images or themes
-                for dir in ["custom_images/", "themes/"]:
-                    custom_images_folder = u"special://profile/addon_data/%s/%s" % (xbmc.getSkinDir(), dir)
-                    custom_images_folder_temp = temp_path + dir
+                for directory in ["custom_images/", "themes/"]:
+                    custom_images_folder = u"special://profile/addon_data/%s/%s" % (xbmc.getSkinDir(), directory)
+                    custom_images_folder_temp = temp_path + directory
                     if xbmcvfs.exists(custom_images_folder_temp):
                         for file in xbmcvfs.listdir(custom_images_folder_temp)[1]:
                             xbmcvfs.copy(custom_images_folder_temp + file,
@@ -424,7 +430,6 @@ class BackupRestore:
                     all_files.append((filepath, modified))
             if len(all_files) > max_backups:
                 from operator import itemgetter
-                all_files = sorted(all_files, key=itemgetter(1), reverse=True)
-                old_files = all_files[max_backups - 1:]
-                for backupfile in all_files[max_backups - 1:]:
+                old_files = sorted(all_files, key=itemgetter(1), reverse=True)[max_backups - 1:]
+                for backupfile in old_files:
                     xbmcvfs.delete(backupfile[0])

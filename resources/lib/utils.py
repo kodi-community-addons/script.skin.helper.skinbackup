@@ -3,7 +3,6 @@
 
 '''Various helper methods'''
 
-import xbmcgui
 import xbmc
 import xbmcvfs
 import sys
@@ -103,7 +102,7 @@ def normalize_string(text):
     return text
 
 
-def add_tozip(src, zf, abs_src):
+def add_tozip(src, zip_file, abs_src):
     '''helper method'''
     dirs, files = xbmcvfs.listdir(src)
     for filename in files:
@@ -114,33 +113,33 @@ def add_tozip(src, zf, abs_src):
         arcname = absname[len(abs_src) + 1:]
         try:
             # newer python can use unicode for the files in the zip
-            zf.write(absname, arcname)
+            zip_file.write(absname, arcname)
         except Exception:
             # older python version uses utf-8 for filenames in the zip
-            zf.write(absname.encode("utf-8"), arcname.encode("utf-8"))
+            zip_file.write(absname.encode("utf-8"), arcname.encode("utf-8"))
     for dir in dirs:
-        add_tozip(os.path.join(src, dir), zf, abs_src)
-    return zf
+        add_tozip(os.path.join(src, dir), zip_file, abs_src)
+    return zip_file
 
 
 def zip_tofile(src, dst):
     '''method to create a zip file from all files/dirs in a path'''
     import zipfile
-    zf = zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED)
+    zip_file = zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED)
     abs_src = os.path.abspath(xbmc.translatePath(src).decode("utf-8"))
-    zf = add_tozip(src, zf, abs_src)
-    zf.close()
+    zip_file = add_tozip(src, zip_file, abs_src)
+    zip_file.close()
 
 
-def unzip_fromfile(zip_file, dest_path):
+def unzip_fromfile(zip_path, dest_path):
     '''method to unzip a zipfile to a destination path'''
     import shutil
     import zipfile
-    zip_file = xbmc.translatePath(zip_file).decode("utf-8")
+    zip_path = xbmc.translatePath(zip_path).decode("utf-8")
     dest_path = xbmc.translatePath(dest_path).decode("utf-8")
-    log_msg("START UNZIP of file %s  to path %s " % (zip_file, dest_path))
-    f = zipfile.ZipFile(zip_file, 'r')
-    for fileinfo in f.infolist():
+    log_msg("START UNZIP of file %s  to path %s " % (zip_path, dest_path))
+    zip_file = zipfile.ZipFile(zip_path, 'r')
+    for fileinfo in zip_file.infolist():
         filename = fileinfo.filename
         if not isinstance(filename, unicode):
             filename = filename.decode("utf-8")
@@ -158,7 +157,7 @@ def unzip_fromfile(zip_file, dest_path):
             # older python uses utf-8
             outputfile = open(filename.encode("utf-8"), "wb")
         # use shutil to support non-ascii formatted files in the zip
-        shutil.copyfileobj(f.open(fileinfo.filename), outputfile)
+        shutil.copyfileobj(zip_file.open(fileinfo.filename), outputfile)
         outputfile.close()
-    f.close()
-    log_msg("UNZIP DONE of file %s  to path %s " % (zip_file, dest_path))
+    zip_file.close()
+    log_msg("UNZIP DONE of file %s  to path %s " % (zip_path, dest_path))

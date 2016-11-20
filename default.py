@@ -13,19 +13,7 @@ from resources.lib.utils import log_exception, log_msg
 
 
 class Main():
-
-    @staticmethod
-    def get_params():
-        '''extract the params from the called script path'''
-        params = {}
-        for arg in sys.argv[1:]:
-            paramname = arg.split('=')[0]
-            paramvalue = arg.replace(paramname + "=", "")
-            paramname = paramname.lower()
-            if paramname == "action":
-                paramvalue = paramvalue.lower()
-            params[paramname] = paramvalue
-        return params
+    '''Main entry point for script'''
 
     def __init__(self):
         '''Initialization and main code run'''
@@ -108,8 +96,22 @@ class Main():
 
     @staticmethod
     def restorecolortheme():
+        '''Restore colortheme from backupfile'''
         colorthemes = ColorThemes()
         colorthemes.restoreColorTheme()
+
+    @staticmethod
+    def get_params():
+        '''extract the params from the called script path'''
+        params = {}
+        for arg in sys.argv[1:]:
+            paramname = arg.split('=')[0]
+            paramvalue = arg.replace(paramname + "=", "")
+            paramname = paramname.lower()
+            if paramname == "action":
+                paramvalue = paramvalue.lower()
+            params[paramname] = paramvalue
+        return params
 
 
 # MAIN

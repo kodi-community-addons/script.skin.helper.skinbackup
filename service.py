@@ -10,7 +10,6 @@ from resources.lib.colorthemes import ColorThemes
 from resources.lib.backuprestore import BackupRestore
 from resources.lib.utils import log_msg, ADDON_ID
 import xbmc
-import xbmcaddon
 
 
 class Service():
@@ -22,7 +21,7 @@ class Service():
         self.colorthemes = ColorThemes()
         self.backuprestore = BackupRestore()
 
-    def __del__(self):
+    def stop(self):
         '''Cleanup Kodi Cpython instances'''
         del self.monitor
         del self.colorthemes
@@ -40,11 +39,11 @@ class Service():
 
             # sleep for one minute
             self.monitor.waitForAbort(60)
+        
+        self.stop()
 
 
 # main entry point
-service = Service()
 log_msg("Service started")
-service.run()
+Service().run()
 log_msg("Service stopped")
-del service

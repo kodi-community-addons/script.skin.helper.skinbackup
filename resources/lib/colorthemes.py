@@ -1,10 +1,17 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+    script.skin.helper.skinbackup
+    Kodi addon to backup skin settings
+'''
+
 import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from utils import log_msg, log_exception, KODI_VERSION, ADDON_ID, kodi_json
+from utils import log_msg, log_exception, ADDON_ID, kodi_json, unzip_fromfile
 from utils import recursive_delete_dir, get_clean_image, normalize_string, SKIN_NAME
-from utils import zip_tofile, unzip_fromfile
 from dialogselect import DialogSelect
 from xml.dom.minidom import parse
 from datetime import timedelta, datetime
@@ -164,7 +171,8 @@ class ColorThemes():
         xbmcvfs.delete(filename.replace(".theme", ".jpg"))
         xbmcvfs.delete(filename)
 
-    def set_icon_for_theme(self, filename):
+    @staticmethod
+    def set_icon_for_theme(filename):
         '''sets an icon for an existing theme'''
         iconpath = filename.replace(".theme", ".jpg")
         dialog = xbmcgui.Dialog()
@@ -228,7 +236,8 @@ class ColorThemes():
                 listitems.append(listitem)
         return listitems
 
-    def load_colortheme(self, filename):
+    @staticmethod
+    def load_colortheme(filename):
         '''load colortheme from themefile'''
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcfile = xbmcvfs.File(filename)
@@ -307,7 +316,6 @@ class ColorThemes():
             # unzip to temp
             xbmcvfs.copy(zip_path, temp_zip)
             unzip_fromfile(temp_zip, temp_path)
-            dirs, files = xbmcvfs.listdir(temp_path)
             for filename in xbmcvfs.listdir(temp_path)[1]:
                 filename = filename.decode("utf-8")
                 sourcefile = os.path.join(temp_path, filename)
