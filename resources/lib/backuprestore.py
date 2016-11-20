@@ -10,7 +10,7 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from utils import log_msg, log_exception, ADDON_ID, SKIN_NAME
+from utils import log_msg, ADDON_ID, SKIN_NAME
 from utils import recursive_delete_dir, get_clean_image, normalize_string
 from utils import zip_tofile, unzip_fromfile
 from dialogselect import DialogSelect
@@ -20,7 +20,7 @@ import os
 
 
 class BackupRestore:
-    '''mainmodule provides the script methods for the skinhelper addon'''
+    '''Main BackupRestore class providing methods to backup and restore skin settings'''
     params = {}
 
     def __init__(self):
@@ -198,7 +198,7 @@ class BackupRestore:
                 if xbmc.getSkinDir() in file:
                     destfile = dest_path + file.replace(xbmc.getSkinDir(), "SKINPROPERTIES")
                     xbmcvfs.copy(sourcefile, destfile)
-                    self.backup_skinshortcuts_properties()
+                    self.backup_skinshortcuts_properties(destfile, dest_path)
             else:
                 # just copy the remaining files
                 xbmcvfs.copy(sourcefile, destfile)

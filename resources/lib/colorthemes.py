@@ -123,8 +123,8 @@ class ColorThemes():
                                            currenttimevalue).decode("utf-8")
         try:
             # check if the time is valid
-            dt = datetime(*(time.strptime(timevalue, "%H:%M")[0:6]))
-            del dt
+            check_date = datetime(*(time.strptime(timevalue, "%H:%M")[0:6]))
+            del check_date
             base_setting = "SkinHelper.ColorTheme.%s" % dayornight
             xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, themename.encode("utf-8")))
             xbmc.executebuiltin("Skin.SetString(%s.time,%s)" % (base_setting, timevalue))
@@ -161,7 +161,8 @@ class ColorThemes():
             xbmcvfs.copy(zip_temp, backupfile)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
-    def remove_theme(self, filename):
+    @staticmethod
+    def remove_theme(filename):
         '''remove theme from disk'''
         xbmcvfs.delete(filename.replace(".theme", ".jpg"))
         xbmcvfs.delete(filename)
@@ -176,7 +177,8 @@ class ColorThemes():
             xbmcvfs.delete(iconpath)
             xbmcvfs.copy(custom_thumbnail, iconpath)
 
-    def get_activetheme(self):
+    @staticmethod
+    def get_activetheme():
         '''get current active theme name'''
         return xbmc.getInfoLabel("$INFO[Skin.String(SkinHelper.LastColorTheme)]").decode("utf-8")
 

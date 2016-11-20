@@ -117,8 +117,8 @@ def add_tozip(src, zip_file, abs_src):
         except Exception:
             # older python version uses utf-8 for filenames in the zip
             zip_file.write(absname.encode("utf-8"), arcname.encode("utf-8"))
-    for dir in dirs:
-        add_tozip(os.path.join(src, dir), zip_file, abs_src)
+    for directory in dirs:
+        add_tozip(os.path.join(src, directory), zip_file, abs_src)
     return zip_file
 
 
