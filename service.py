@@ -8,7 +8,7 @@
 
 from resources.lib.colorthemes import ColorThemes
 from resources.lib.backuprestore import BackupRestore
-from resources.lib.utils import log_msg, ADDON_ID
+from resources.lib.utils import log_msg
 import xbmc
 
 
@@ -29,7 +29,7 @@ class Service():
 
     def run(self):
         '''Main service code'''
-        while not (self.monitor.abortRequested()):
+        while not self.monitor.abortRequested():
 
             # check daynight colorthemes
             self.colorthemes.check_daynighttheme()
@@ -39,7 +39,7 @@ class Service():
 
             # sleep for one minute
             self.monitor.waitForAbort(60)
-        
+
         self.stop()
 
 

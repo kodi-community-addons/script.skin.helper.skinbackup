@@ -13,8 +13,7 @@ import xbmcaddon
 from utils import log_msg, log_exception, ADDON_ID, kodi_json, unzip_fromfile
 from utils import recursive_delete_dir, get_clean_image, normalize_string, SKIN_NAME
 from dialogselect import DialogSelect
-from xml.dom.minidom import parse
-from datetime import timedelta, datetime
+from datetime import datetime
 import time
 import os
 
@@ -27,8 +26,6 @@ class ColorThemes():
         self.skinthemes_path = u"special://skin/extras/skinthemes/"
         if xbmcvfs.exists("special://home/addons/resource.skinthemes.%s/resources/" % SKIN_NAME):
             self.skinthemes_path = u"special://home/addons/resource.skinthemes.%s/resources/" % SKIN_NAME
-        self.active_daynighttheme = None
-        self.themes = None
         self.addon = xbmcaddon.Addon(ADDON_ID)
 
     def __del__(self):
@@ -38,8 +35,6 @@ class ColorThemes():
     def colorthemes(self):
         '''show dialog with all available color themes'''
         listitems = []
-        activetheme = self.get_activetheme()
-
         # create item
         listitem = xbmcgui.ListItem(label=self.addon.getLocalizedString(32035), iconImage="DefaultAddonSkin.png")
         listitem.setLabel2(self.addon.getLocalizedString(32036))
@@ -92,7 +87,7 @@ class ColorThemes():
                 elif ret == 2 and not has_icon:
                     self.set_icon_for_theme(themefile)
                 elif ret == 3 or (ret == 2 and has_icon):
-                    self.backup_theme(themename, themefile)
+                    self.backup_theme(themename)
                 if not ret == 0:
                     # show selection dialog again
                     self.colorthemes()
@@ -140,7 +135,7 @@ class ColorThemes():
             log_exception(__name__, exc)
             xbmcgui.Dialog().ok(xbmc.getLocalizedString(329), self.addon.getLocalizedString(32018))
 
-    def backup_theme(self, themename, themefile):
+    def backup_theme(self, themename):
         '''backup a colortheme to a zipfile'''
         import zipfile
         backup_path = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32029), "files").decode("utf-8")
@@ -183,11 +178,7 @@ class ColorThemes():
 
     def get_activetheme(self):
         '''get current active theme name'''
-        if self.active_daynighttheme:
-            activetheme = self.active_daynighttheme
-        else:
-            activetheme = xbmc.getInfoLabel("$INFO[Skin.String(SkinHelper.LastColorTheme)]").decode("utf-8")
-        return activetheme
+        return xbmc.getInfoLabel("$INFO[Skin.String(SkinHelper.LastColorTheme)]").decode("utf-8")
 
     def get_skin_colorthemes(self):
         '''returns all available skinprovided colorthemes as listitems'''
@@ -411,7 +402,7 @@ class ColorThemes():
                 nighttime = xbmc.getInfoLabel("Skin.String(SkinHelper.ColorTheme.Night.time)")
                 nighttime = datetime(*(time.strptime(nighttime, "%H:%M")[0:6])).time()
                 timestamp = datetime.now().time()
-                if (daytime <= timestamp <= nighttime):
+                if daytime <= timestamp <= nighttime:
                     dayornight = "Day"
                 else:
                     dayornight = "Night"

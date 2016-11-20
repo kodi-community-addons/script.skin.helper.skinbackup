@@ -10,7 +10,7 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from utils import log_msg, log_exception, KODI_VERSION, ADDON_ID, SKIN_NAME
+from utils import log_msg, log_exception, ADDON_ID, SKIN_NAME
 from utils import recursive_delete_dir, get_clean_image, normalize_string
 from utils import zip_tofile, unzip_fromfile
 from dialogselect import DialogSelect
@@ -171,8 +171,7 @@ class BackupRestore:
             custom_images_folder = u"special://profile/addon_data/%s/%s" % (xbmc.getSkinDir(), item)
             if xbmcvfs.exists(custom_images_folder):
                 custom_images_folder_temp = os.path.join(temp_path, item)
-                dirs, files = xbmcvfs.listdir(custom_images_folder)
-                for file in files:
+                for file in xbmcvfs.listdir(custom_images_folder):
                     source = os.path.join(custom_images_folder, file)
                     dest = os.path.join(custom_images_folder_temp, file)
                     xbmcvfs.copy(source, dest)
@@ -199,12 +198,13 @@ class BackupRestore:
                 if xbmc.getSkinDir() in file:
                     destfile = dest_path + file.replace(xbmc.getSkinDir(), "SKINPROPERTIES")
                     xbmcvfs.copy(sourcefile, destfile)
-                    self.backup_skinshortcuts_properties
+                    self.backup_skinshortcuts_properties()
             else:
                 # just copy the remaining files
                 xbmcvfs.copy(sourcefile, destfile)
 
-    def backup_skinshortcuts_images(self, shortcutfile, dest_path):
+    @staticmethod
+    def backup_skinshortcuts_images(shortcutfile, dest_path):
         '''parse skinshortcuts file and copy images to backup location'''
         shortcutfile = xbmc.translatePath(shortcutfile).decode("utf-8")
         doc = parse(shortcutfile)
@@ -237,7 +237,8 @@ class BackupRestore:
         shortcuts_file.write(doc.toxml(encoding='utf-8'))
         shortcuts_file.close()
 
-    def backup_skinshortcuts_properties(self, propertiesfile, dest_path):
+    @staticmethod
+    def backup_skinshortcuts_properties(propertiesfile, dest_path):
         '''parse skinshortcuts properties file and translate images'''
         # look for any backgrounds and translate them
         propfile = xbmcvfs.File(propertiesfile, "w")

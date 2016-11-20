@@ -12,7 +12,7 @@ import xbmc
 
 class DialogSelect(xbmcgui.WindowXMLDialog):
     '''Wrapper around Kodi dialogselect dialog'''
-    self.list_control = None
+    list_control = None
 
     def __init__(self, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)

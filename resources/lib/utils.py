@@ -29,7 +29,7 @@ def log_exception(modulename, exceptiondetails):
     log_msg("ERROR in %s ! --> %s" % (modulename, exceptiondetails), xbmc.LOGERROR)
 
 
-def kodi_json(jsonmethod, params=None, returntype=None):
+def kodi_json(jsonmethod, params=None):
     '''get info from the kodi json api'''
     import json
     kodi_json = {}
@@ -60,8 +60,8 @@ def recursive_delete_dir(fullpath):
     dirs, files = xbmcvfs.listdir(fullpath)
     for file in files:
         success = xbmcvfs.delete(os.path.join(fullpath, file))
-    for dir in dirs:
-        success = recursive_delete_dir(os.path.join(fullpath, dir))
+    for directory in dirs:
+        success = recursive_delete_dir(os.path.join(fullpath, directory))
     success = xbmcvfs.rmdir(fullpath)
     return success
 
