@@ -13,7 +13,7 @@ import unicodedata
 
 ADDON_ID = "script.skin.helper.skinbackup"
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
-SKIN_NAME = xbmc.getSkinDir().decode("utf-8").replace("skin.", "").replace(".krypton","").replace(".jarvis","")
+SKIN_NAME = xbmc.getSkinDir().decode("utf-8").replace("skin.", "").replace(".kryptonbeta","").replace(".jarvisbeta","")
 
 
 def log_msg(msg, loglevel=xbmc.LOGNOTICE):
