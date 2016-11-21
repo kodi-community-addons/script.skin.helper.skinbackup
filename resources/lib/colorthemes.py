@@ -23,6 +23,8 @@ class ColorThemes():
 
     def __init__(self):
         self.userthemes_path = u"special://profile/addon_data/%s/themes/" % xbmc.getSkinDir()
+        if not xbmcvfs.exists(self.userthemes_path):
+            xbmcvfs.mkdir(self.userthemes_path)
         self.skinthemes_path = u"special://skin/extras/skinthemes/"
         if xbmcvfs.exists("special://home/addons/resource.skinthemes.%s/resources/" % SKIN_NAME):
             self.skinthemes_path = u"special://home/addons/resource.skinthemes.%s/resources/" % SKIN_NAME

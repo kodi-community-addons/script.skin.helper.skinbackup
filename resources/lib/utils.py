@@ -16,7 +16,7 @@ KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
 SKIN_NAME = xbmc.getSkinDir().decode("utf-8").replace("skin.", "").replace(".kryptonbeta","").replace(".jarvisbeta","")
 
 
-def log_msg(msg, loglevel=xbmc.LOGNOTICE):
+def log_msg(msg, loglevel=xbmc.LOGDEBUG):
     '''log to kodi logfile'''
     if isinstance(msg, unicode):
         msg = msg.encode('utf-8')
