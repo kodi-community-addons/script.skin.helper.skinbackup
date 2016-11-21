@@ -243,11 +243,11 @@ class ColorThemes():
         current_skintheme = xbmc.getInfoLabel("Skin.CurrentTheme").decode("utf-8")
 
         current_skinfont = None
-        json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.font"}, "value")
+        json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.font"})
         if json_response:
             current_skinfont = json_response
         current_skincolors = None
-        json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.skincolors"}, "value")
+        json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.skincolors"})
         if json_response:
             current_skincolors = json_response
 
@@ -323,11 +323,11 @@ class ColorThemes():
         '''create a colortheme from current skin color settings'''
         try:
             current_skinfont = None
-            json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.font"}, "value")
+            json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.font"})
             if json_response:
                 current_skinfont = json_response
             current_skincolors = None
-            json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.skincolors"}, "value")
+            json_response = kodi_json("Settings.GetSettingValue", {"setting": "lookandfeel.skincolors"})
             if json_response:
                 current_skincolors = json_response
 

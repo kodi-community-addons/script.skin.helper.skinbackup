@@ -171,7 +171,7 @@ class BackupRestore:
             custom_images_folder = u"special://profile/addon_data/%s/%s" % (xbmc.getSkinDir(), item)
             if xbmcvfs.exists(custom_images_folder):
                 custom_images_folder_temp = os.path.join(temp_path, item)
-                for file in xbmcvfs.listdir(custom_images_folder):
+                for file in xbmcvfs.listdir(custom_images_folder)[1]:
                     source = os.path.join(custom_images_folder, file)
                     dest = os.path.join(custom_images_folder_temp, file)
                     xbmcvfs.copy(source, dest)
