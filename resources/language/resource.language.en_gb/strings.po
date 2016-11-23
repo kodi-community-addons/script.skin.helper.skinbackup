@@ -125,7 +125,7 @@ msgid "Color theme created succesfully"
 msgstr ""
 
 msgctxt "#32027"
-msgid "Your colortheme is now available in the list of available themes"
+msgid "Your color theme is now available in the list of available themes"
 msgstr ""
 
 msgctxt "#32028"
@@ -169,6 +169,6 @@ msgid "Import Color Theme"
 msgstr ""
 
 msgctxt "#32038"
-msgid "Import a colortheme from file."
+msgid "Import a color theme from file."
 msgstr ""
 
