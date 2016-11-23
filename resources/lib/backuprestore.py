@@ -314,7 +314,7 @@ class BackupRestore:
                     settingname = settingname.encode("utf-8")
                 # we must grab the actual values because the xml file only updates at restarts
                 if settingtype == "bool":
-                    if xbmc.getCondVisibility("Skin.HasSetting(%s)" % settingname):
+                    if not "$INFO" in settingname and xbmc.getCondVisibility("Skin.HasSetting(%s)" % settingname):
                         settingvalue = "true"
                     else:
                         settingvalue = "false"

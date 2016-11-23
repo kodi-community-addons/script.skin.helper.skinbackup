@@ -18,7 +18,6 @@ class DialogSelect(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.listing = kwargs.get("listing")
         self.windowtitle = kwargs.get("windowtitle")
-        self.richlayout = kwargs.get("richlayout", False)
         self.extrabutton = kwargs.get("extrabutton", "")
         self.autofocus = kwargs.get("autofocus", "")
         self.result = None
@@ -71,28 +70,18 @@ class DialogSelect(xbmcgui.WindowXMLDialog):
 
     def set_list_control(self):
         '''select correct list (3=small, 6=big with icons)'''
-        has_list3 = False
-        has_list6 = False
         try:
-            control = self.getControl(3)
-            has_list3 = True
+            # prefer list control 6
+            self.list_control = self.getControl(6)
+            self.list_control.setEnabled(True)
+            self.list_control.setVisible(True)
+            other_list = self.getControl(3)
+            other_list.setEnabled(False)
+            other_list.setVisible(False)
         except Exception:
-            pass
-        try:
-            control = self.getControl(6)
-            has_list6 = True
-        except Exception:
-            pass
-
-        if has_list3:
             self.list_control = self.getControl(3)
-        else:
-            self.list_control = self.getControl(6)
-        # set list id 6 if available for rich dialog
-        if has_list6 and self.richlayout:
-            self.list_control = self.getControl(6)
-        self.list_control.setEnabled(True)
-        self.list_control.setVisible(True)
+            self.list_control.setEnabled(True)
+            self.list_control.setVisible(True)
 
         self.set_cancel_button()
         self.getControl(5).setVisible(False)
