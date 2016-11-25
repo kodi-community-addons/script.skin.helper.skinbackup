@@ -22,7 +22,7 @@ msgstr "Général"
 
 msgctxt "#32001"
 msgid "Default backup path"
-msgstr "Chemin par défaut de la sauvagarde"
+msgstr "Chemin par défaut de la sauvegarde"
 
 msgctxt "#32002"
 msgid "Select location to store skin backups"
@@ -30,7 +30,7 @@ msgstr "Sélectionner l'emplacement pour conserver les sauvegardes"
 
 msgctxt "#32003"
 msgid "Please enter a name for the backup"
-msgstr "Veuillez entrer un nom pour la sauvagarde"
+msgstr "Veuillez entrer un nom pour la sauvegarde"
 
 msgctxt "#32004"
 msgid "Backup the skin settings"
@@ -38,7 +38,7 @@ msgstr "Sauvegarde des paramètres du thème"
 
 msgctxt "#32005"
 msgid "Backupfile was succesfully created!"
-msgstr "Le fichier de sauvagarde a été créé avec succès !"
+msgstr "Le fichier de sauvegarde a été créé avec succès !"
 
 msgctxt "#32006"
 msgid "Restore the skin settings"

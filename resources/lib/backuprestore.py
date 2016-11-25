@@ -291,6 +291,7 @@ class BackupRestore:
         temp_path = u'special://temp/skinbackup/'
         if xbmcvfs.exists(temp_path):
             recursive_delete_dir(temp_path)
+            xbmc.sleep(2000)
         xbmcvfs.mkdir(temp_path)
         return temp_path
 
