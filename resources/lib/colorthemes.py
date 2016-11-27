@@ -377,9 +377,7 @@ class ColorThemes():
                             newimage_path = self.userthemes_path + newimage
                             if xbmcvfs.exists(image):
                                 xbmcvfs.copy(image, newimage_path)
-                                newimage_vfs = "special://profile/self.addon_data/%s/themes/%s" % (
-                                    xbmc.getSkinDir(), newimage)
-                                skinsetting = (setting_type, setting_name, newimage_vfs)
+                                skinsetting = (setting_type, setting_name, newimage_path)
                     newlist.append(skinsetting)
 
                 # save guisettings
