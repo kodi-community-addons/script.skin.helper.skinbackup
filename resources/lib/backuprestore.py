@@ -155,7 +155,7 @@ class BackupRestore:
                     self.backup(backup_file=self.get_backupfilename())
                 else:
                     # restore backup
-                    self.restore(result.getfilename())
+                    self.restore(result.getfilename().decode("utf-8"))
                 # always open the dialog again
                 self.backuprestore()
 
