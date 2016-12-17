@@ -241,8 +241,9 @@ class BackupRestore:
     def backup_skinshortcuts_properties(propertiesfile, dest_path):
         '''parse skinshortcuts properties file and translate images'''
         # look for any backgrounds and translate them
-        propfile = xbmcvfs.File(propertiesfile, "w")
+        propfile = xbmcvfs.File(propertiesfile)
         data = propfile.read()
+        propfile.close()
         allprops = eval(data) if data else []
         for count, prop in enumerate(allprops):
             if prop[2] == "background":
@@ -259,6 +260,7 @@ class BackupRestore:
                         xbmcvfs.copy(background, newthumb)
                         allprops[count] = [prop[0], prop[1], prop[2], newthumb_vfs]
         # write updated properties file
+        propfile = xbmcvfs.File(propertiesfile, "w")
         propfile.write(repr(allprops))
         propfile.close()
 
