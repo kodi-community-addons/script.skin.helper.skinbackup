@@ -268,7 +268,7 @@ class BackupRestore:
         '''get the file location where backups should be stored'''
         backuppath = self.addon.getSetting("backup_path").decode("utf-8")
         if not backuppath:
-            backuppath = xbmcgui.Dialog().browse(0, self.addon.getLocalizedString(32002),
+            backuppath = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32002),
                                                  'files').decode("utf-8")
         return backuppath
 
