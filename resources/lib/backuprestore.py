@@ -59,6 +59,9 @@ class BackupRestore:
         # copy to final location
         if xbmcvfs.exists(backup_file):
             xbmcvfs.delete(backup_file)
+            xbmc.sleep(500)
+            while xbmcvfs.exists(backup_file):
+                xbmc.sleep(500)
         xbmcvfs.copy(zip_temp, backup_file)
 
         # cleanup temp
@@ -270,6 +273,7 @@ class BackupRestore:
         if not backuppath:
             backuppath = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32002),
                                                  'files').decode("utf-8")
+            self.addon.setSetting("backup_path", backuppath.encode("utf-8"))
         return backuppath
 
     def get_backupfilename(self, promptfilename=False):
