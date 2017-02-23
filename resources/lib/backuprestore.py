@@ -10,7 +10,7 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from utils import log_msg, ADDON_ID, SKIN_NAME
+from utils import log_msg, ADDON_ID, get_skin_name, ADDON_DATA
 from utils import recursive_delete_dir, get_clean_image, normalize_string
 from utils import zip_tofile, unzip_fromfile
 from dialogselect import DialogSelect
@@ -41,6 +41,8 @@ class BackupRestore:
 
         # create temp path
         temp_path = self.create_temp()
+        zip_temp = u'%s/skinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d %H.%M'))
+        temp_path = temp_path + "skinbackup/"
 
         # backup skinshortcuts preferences
         if not filters or (filters and "skinshortcuts" in filters):
@@ -52,7 +54,6 @@ class BackupRestore:
             self.backup_skinsettings(skinsettings_path, filters, temp_path)
 
         # zip the backup
-        zip_temp = u'special://temp/skinbackup-%s.zip' % datetime.now().strftime('%Y-%m-%d %H.%M')
         zip_temp = xbmc.translatePath(zip_temp).decode("utf-8")
         zip_tofile(temp_path, zip_temp)
 
@@ -60,8 +61,10 @@ class BackupRestore:
         if xbmcvfs.exists(backup_file):
             xbmcvfs.delete(backup_file)
             xbmc.sleep(500)
-            while xbmcvfs.exists(backup_file):
+            count = 20
+            while xbmcvfs.exists(backup_file) and count:
                 xbmc.sleep(500)
+                count -= 1
         xbmcvfs.copy(zip_temp, backup_file)
 
         # cleanup temp
@@ -94,7 +97,7 @@ class BackupRestore:
                 skinsettingsfile = temp_path + "guisettings.txt"
                 if progressdialog:
                     progressdialog.update(0, "unpacking backup...")
-                zip_temp = u'special://temp/skinbackup-%s.zip' % datetime.now().strftime('%Y-%m-%d %H:%M')
+                zip_temp = u'%sskinbackup-%s.zip' % (ADDON_DATA, datetime.now().strftime('%Y-%m-%d %H:%M'))
                 xbmcvfs.copy(filename, zip_temp)
                 unzip_fromfile(zip_temp, temp_path)
                 xbmcvfs.delete(zip_temp)
@@ -287,18 +290,19 @@ class BackupRestore:
         else:
             # generate filename
             backupfile = "%s Skinbackup (%s).zip" % (
-                SKIN_NAME.capitalize(),
+                get_skin_name().capitalize(),
                 datetime.now().strftime('%Y-%m-%d %H.%M.%S'))
         return backuppath + backupfile
 
     @staticmethod
     def create_temp():
         '''create temp folder for skin backup/restore'''
-        temp_path = u'special://temp/skinbackup/'
+        temp_path = u'%stemp/' % ADDON_DATA
         if xbmcvfs.exists(temp_path):
             recursive_delete_dir(temp_path)
             xbmc.sleep(2000)
-        xbmcvfs.mkdir(temp_path)
+        xbmcvfs.mkdirs(temp_path)
+        xbmcvfs.mkdirs(temp_path + "skinbackup/")
         return temp_path
 
     def get_restorefilename(self):
@@ -321,7 +325,7 @@ class BackupRestore:
                     settingname = settingname.encode("utf-8")
                 # we must grab the actual values because the xml file only updates at restarts
                 if settingtype == "bool":
-                    if not "$INFO" in settingname and xbmc.getCondVisibility("Skin.HasSetting(%s)" % settingname):
+                    if "$INFO" not in settingname and xbmc.getCondVisibility("Skin.HasSetting(%s)" % settingname):
                         settingvalue = "true"
                     else:
                         settingvalue = "false"

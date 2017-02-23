@@ -13,7 +13,7 @@ import unicodedata
 
 ADDON_ID = "script.skin.helper.skinbackup"
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
-SKIN_NAME = xbmc.getSkinDir().decode("utf-8").replace("skin.", "").replace(".kryptonbeta","").replace(".jarvisbeta","")
+ADDON_DATA = u'special://profile/addon_data/%s/' % ADDON_ID
 
 
 def log_msg(msg, loglevel=xbmc.LOGDEBUG):
@@ -165,3 +165,13 @@ def unzip_fromfile(zip_path, dest_path):
         outputfile.close()
     zip_file.close()
     log_msg("UNZIP DONE of file %s  to path %s " % (zip_path, dest_path))
+
+
+def get_skin_name():
+    ''' get the skin name filtering out any beta prefixes and such.'''
+    skin_name = xbmc.getSkinDir().decode("utf-8")
+    skin_name = skin_name.replace("skin.", "")
+    skin_name = skin_name.replace(".kryptonbeta", "")
+    skin_name = skin_name.replace(".jarvisbeta", "")
+    skin_name = skin_name.replace(".leiabeta", "")
+    return skin_name

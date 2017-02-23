@@ -65,7 +65,7 @@ msgid "Are you sure you want to reset the skin to default settings ?"
 msgstr ""
 
 msgctxt "#32012"
-msgid "Open settings"
+msgid "Settings"
 msgstr ""
 
 msgctxt "#32013"

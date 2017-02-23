@@ -11,7 +11,7 @@ import xbmcvfs
 import xbmcgui
 import xbmcaddon
 from utils import log_msg, log_exception, ADDON_ID, kodi_json, unzip_fromfile
-from utils import recursive_delete_dir, get_clean_image, normalize_string, SKIN_NAME
+from utils import recursive_delete_dir, get_clean_image, normalize_string, get_skin_name
 from dialogselect import DialogSelect
 from datetime import datetime
 import time
@@ -26,8 +26,8 @@ class ColorThemes():
         if not xbmcvfs.exists(self.userthemes_path):
             xbmcvfs.mkdir(self.userthemes_path)
         self.skinthemes_path = u"special://skin/extras/skinthemes/"
-        if xbmcvfs.exists("special://home/addons/resource.skinthemes.%s/resources/" % SKIN_NAME):
-            self.skinthemes_path = u"special://home/addons/resource.skinthemes.%s/resources/" % SKIN_NAME
+        if xbmcvfs.exists("special://home/addons/resource.skinthemes.%s/resources/" % get_skin_name()):
+            self.skinthemes_path = u"special://home/addons/resource.skinthemes.%s/resources/" % get_skin_name()
         self.addon = xbmcaddon.Addon(ADDON_ID)
 
     def __del__(self):
@@ -143,7 +143,7 @@ class ColorThemes():
         backup_path = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32029), "files").decode("utf-8")
         if backup_path:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            backup_name = u"%s ColorTheme - %s" % (SKIN_NAME.capitalize(), themename)
+            backup_name = u"%s ColorTheme - %s" % (get_skin_name().capitalize(), themename)
             backupfile = os.path.join(backup_path, backup_name + u".zip")
             zip_temp = u'special://temp/%s.zip' % backup_name
             xbmcvfs.delete(zip_temp)

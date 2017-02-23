@@ -73,7 +73,9 @@ class Main():
         silent = self.params.get("silent", "") == "true"
         backuprestore.reset(filters, silent)
         xbmc.Monitor().waitForAbort(2)
-        xbmc.executebuiltin("RunScript(script.skin.helper.service,action=checkskinsettings)")
+        # Optional: If skin helper service present - tell it that the skin settings should be checked.
+        if xbmc.getCondVisibility("System.HasAddon(script.skin.helper.service)"):
+            xbmc.executebuiltin("RunScript(script.skin.helper.service,action=checkskinsettings)")
 
     def colorthemes(self):
         '''Open colorthemes dialog'''
