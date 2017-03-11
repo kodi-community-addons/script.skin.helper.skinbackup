@@ -146,7 +146,7 @@ msgstr "Sélectionner un thème de couleur"
 
 msgctxt "#32032"
 msgid "Enable automatic daily backups"
-msgstr "Activer la sauvegarde journailière automatique"
+msgstr "Activer la sauvegarde journalière automatique"
 
 msgctxt "#32033"
 msgid "Restoring..."
