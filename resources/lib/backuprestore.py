@@ -295,8 +295,9 @@ class BackupRestore:
 
     def get_restorefilename(self):
         '''browse for backup file'''
-        return xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32008),
+        filename = xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32008),
                                        'files').decode("utf-8")
+        filename = filename.replace("//", "") # possible fix for strange path issue on atv/ftv ?
 
     @staticmethod
     def get_skinsettings(filters=None):
