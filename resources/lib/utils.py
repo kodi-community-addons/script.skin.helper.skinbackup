@@ -70,6 +70,32 @@ def recursive_delete_dir(fullpath):
     return success
 
 
+def copy_file(source, destination, do_wait=False):
+    '''copy a file on the filesystem, wait for the action to be completed'''
+    if xbmcvfs.exists(destination):
+        delete_file(destination)
+    xbmcvfs.copy(source, destination)
+    if do_wait:
+        count = 20
+        while count:
+            xbmc.sleep(500)  # this first sleep is intentional
+            if xbmcvfs.exists(destination):
+                break
+            count -= 1
+
+
+def delete_file(filepath, do_wait=False):
+    '''delete a file on the filesystem, wait for the action to be completed'''
+    xbmcvfs.delete(filepath)
+    if do_wait:
+        count = 20
+        while count:
+            xbmc.sleep(500)  # this first sleep is intentional
+            if not xbmcvfs.exists(filepath):
+                break
+            count -= 1
+
+
 def get_clean_image(image):
     '''helper to strip all kodi tags/formatting of an image path/url'''
     if image and "image://" in image:
