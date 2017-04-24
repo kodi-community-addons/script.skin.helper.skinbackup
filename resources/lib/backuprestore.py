@@ -286,7 +286,8 @@ class BackupRestore:
     def create_temp():
         '''create temp folder for skin backup/restore'''
         temp_path = u'%stemp/' % ADDON_DATA
-        temp_path = temp_path.replace("//","/")
+        # workaround weird slashes behaviour on some platforms.
+        temp_path = temp_path.replace("//","/").replace("special:/","special://")
         if xbmcvfs.exists(temp_path):
             recursive_delete_dir(temp_path)
             xbmc.sleep(2000)
