@@ -5,6 +5,7 @@
 
 import xbmc
 import xbmcvfs
+import xbmcgui
 import sys
 import urllib
 from traceback import format_exc
@@ -25,8 +26,14 @@ def log_msg(msg, loglevel=xbmc.LOGDEBUG):
 
 def log_exception(modulename, exceptiondetails):
     '''helper to properly log exception details'''
-    log_msg(format_exc(sys.exc_info()),xbmc.LOGNOTICE)
+    log_msg(format_exc(sys.exc_info()), xbmc.LOGNOTICE)
     log_msg("ERROR in %s ! --> %s" % (modulename, exceptiondetails), xbmc.LOGERROR)
+    dialog = xbmcgui.Dialog()
+    dialog.notification(
+        "Skin Helper Backup",
+        "Error while executing, please check your kodi logfile.",
+        xbmcgui.NOTIFICATION_ERROR)
+    del dialog
 
 
 def kodi_json(jsonmethod, params=None):
