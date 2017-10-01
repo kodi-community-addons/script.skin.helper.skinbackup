@@ -180,22 +180,25 @@ def unzip_fromfile(zip_path, dest_path):
         filename = fileinfo.filename
         if not isinstance(filename, unicode):
             filename = filename.decode("utf-8")
-        log_msg("unzipping " + filename)
+        log_msg("unzipping: " + filename)
+        splitter = None
         if "\\" in filename:
             xbmcvfs.mkdirs(os.path.join(dest_path, filename.rsplit("\\", 1)[0]))
+            splitter = "\\"
         elif "/" in filename:
             xbmcvfs.mkdirs(os.path.join(dest_path, filename.rsplit("/", 1)[0]))
+            splitter = "/"
         filename = os.path.join(dest_path, filename)
-        log_msg("unzipping " + filename)
-        try:
-            # newer python uses unicode
-            outputfile = open(filename, "wb")
-        except Exception:
-            # older python uses utf-8
-            outputfile = open(filename.encode("utf-8"), "wb")
-        # use shutil to support non-ascii formatted files in the zip
-        shutil.copyfileobj(zip_file.open(fileinfo.filename), outputfile)
-        outputfile.close()
+        if not (splitter and filename.endswith(splitter)):
+            try:
+                # newer python uses unicode
+                outputfile = open(filename, "wb")
+            except Exception:
+                # older python uses utf-8
+                outputfile = open(filename.encode("utf-8"), "wb")
+            # use shutil to support non-ascii formatted files in the zip
+            shutil.copyfileobj(zip_file.open(fileinfo.filename), outputfile)
+            outputfile.close()
     zip_file.close()
     log_msg("UNZIP DONE of file %s  to path %s " % (zip_path, dest_path))
 

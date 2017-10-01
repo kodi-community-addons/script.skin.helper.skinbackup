@@ -90,7 +90,7 @@ class BackupRestore:
                 skinsettingsfile = temp_path + "guisettings.txt"
                 if progressdialog:
                     progressdialog.update(0, "unpacking backup...")
-                zip_temp = u'%sskinbackup-%s.zip' % (ADDON_DATA, datetime.now().strftime('%Y-%m-%d %H:%M'))
+                zip_temp = u'%sskinbackup-%s.zip' % (ADDON_DATA, datetime.now().strftime('%Y-%m-%d-%H-%M'))
                 copy_file(filename, zip_temp, True)
                 unzip_fromfile(zip_temp, temp_path)
                 delete_file(zip_temp)
@@ -111,8 +111,8 @@ class BackupRestore:
             # cleanup temp
             recursive_delete_dir(temp_path)
             progressdialog.close()
-            if not silent:
-                xbmcgui.Dialog().ok(self.addon.getLocalizedString(32006), self.addon.getLocalizedString(32009))
+        if not silent:
+            xbmcgui.Dialog().ok(self.addon.getLocalizedString(32006), self.addon.getLocalizedString(32009))
 
     def backuprestore(self):
         '''show dialog with all options for skin backups'''
@@ -300,6 +300,7 @@ class BackupRestore:
         filename = xbmcgui.Dialog().browse(1, self.addon.getLocalizedString(32008),
                                        'files').decode("utf-8")
         filename = filename.replace("//", "") # possible fix for strange path issue on atv/ftv ?
+        return filename
 
     @staticmethod
     def get_skinsettings(filters=None):
