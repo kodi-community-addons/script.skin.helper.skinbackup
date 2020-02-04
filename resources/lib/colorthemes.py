@@ -6,28 +6,28 @@
     Kodi addon to backup skin settings
 '''
 
+import os, sys
 import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-from utils import log_msg, log_exception, ADDON_ID, kodi_json, unzip_fromfile
-from utils import recursive_delete_dir, get_clean_image, normalize_string, get_skin_name
-from dialogselect import DialogSelect
+from resources.lib.utils import log_msg, log_exception, ADDON_ID, kodi_json, unzip_fromfile, try_encode, try_decode
+from resources.lib.utils import recursive_delete_dir, get_clean_image, normalize_string, get_skin_name
+from resources.lib.dialogselect import DialogSelect
 from datetime import datetime
 import time
-import os
 
 
 class ColorThemes():
     '''Allow the user to create custom colorthemes for the skin by creating backups of colorsettings for the skin'''
 
     def __init__(self):
-        self.userthemes_path = u"special://profile/addon_data/%s/themes/" % xbmc.getSkinDir()
+        self.userthemes_path = try_encode("special://profile/addon_data/%s/themes/" % xbmc.getSkinDir())
         if not xbmcvfs.exists(self.userthemes_path):
             xbmcvfs.mkdir(self.userthemes_path)
-        self.skinthemes_path = u"special://skin/extras/skinthemes/"
+        self.skinthemes_path = try_encode("special://skin/extras/skinthemes/")
         if xbmcvfs.exists("special://home/addons/resource.skinthemes.%s/resources/" % get_skin_name()):
-            self.skinthemes_path = u"special://home/addons/resource.skinthemes.%s/resources/" % get_skin_name()
+            self.skinthemes_path = try_encode("special://home/addons/resource.skinthemes.%s/resources/" % get_skin_name())
         self.addon = xbmcaddon.Addon(ADDON_ID)
 
     def __del__(self):
@@ -128,11 +128,11 @@ class ColorThemes():
             check_date = datetime(*(time.strptime(timevalue, "%H:%M")[0:6]))
             del check_date
             base_setting = "SkinHelper.ColorTheme.%s" % dayornight
-            xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, themename.encode("utf-8")))
+            xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, try_encode(themename)))
             xbmc.executebuiltin("Skin.SetString(%s.time,%s)" % (base_setting, timevalue))
-            label = "%s  (%s %s)" % (themename.encode("utf-8"), self.addon.getLocalizedString(32019), timevalue)
+            label = "%s  (%s %s)" % (try_encode(themename), self.addon.getLocalizedString(32019), timevalue)
             xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (base_setting, label))
-            xbmc.executebuiltin("Skin.SetString(%s.file,%s)" % (base_setting, themefile.encode("utf-8")))
+            xbmc.executebuiltin("Skin.SetString(%s.file,%s)" % (base_setting, try_encode(themefile)))
         except Exception as exc:
             log_exception(__name__, exc)
             xbmcgui.Dialog().ok(xbmc.getLocalizedString(329), self.addon.getLocalizedString(32018))
@@ -143,9 +143,9 @@ class ColorThemes():
         backup_path = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32029), "files").decode("utf-8")
         if backup_path:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            backup_name = u"%s ColorTheme - %s" % (get_skin_name().capitalize(), themename)
-            backupfile = os.path.join(backup_path, backup_name + u".zip")
-            zip_temp = u'special://temp/%s.zip' % backup_name
+            backup_name = try_encode("%s ColorTheme - %s" % (get_skin_name().capitalize(), themename))
+            backupfile = os.path.join(backup_path, backup_name + try_encode(".zip"))
+            zip_temp = try_encode('special://temp/%s.zip' % backup_name)
             xbmcvfs.delete(zip_temp)
             xbmcvfs.delete(backupfile)
             zip_temp = xbmc.translatePath(zip_temp).decode("utf-8")
@@ -270,8 +270,9 @@ class ColorThemes():
                 continue
             else:
                 setting = skinsetting[1]
-                if isinstance(setting, unicode):
-                    setting = setting.encode("utf-8")
+                if sys.version_info.major < 3:
+                    if isinstance(setting, unicode):
+                        setting = setting.encode("utf-8")
                 if setting not in settingslist:
                     settingslist.add(setting)
                     if skinsetting[0] == "string":
@@ -302,8 +303,8 @@ class ColorThemes():
         if zip_path and zip_path.endswith(".zip"):
 
             # create temp path
-            temp_path = u'special://temp/skinbackup/'
-            temp_zip = u"special://temp/colortheme.zip"
+            temp_path = try_encode('special://temp/skinbackup/')
+            temp_zip = try_encode("special://temp/colortheme.zip")
             if xbmcvfs.exists(temp_path):
                 recursive_delete_dir(temp_path)
             xbmcvfs.mkdir(temp_path)
@@ -340,7 +341,7 @@ class ColorThemes():
                 return
 
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            xbmc.executebuiltin("Skin.SetString(SkinHelper.LastColorTheme,%s)" % themename.encode("utf-8"))
+            xbmc.executebuiltin("Skin.SetString(SkinHelper.LastColorTheme,%s)" % try_encode(themename))
 
             # add screenshot
             custom_thumbnail = xbmcgui.Dialog().browse(2, self.addon.getLocalizedString(32024), 'files')
@@ -349,7 +350,7 @@ class ColorThemes():
                 xbmcvfs.copy(custom_thumbnail, self.userthemes_path + themename + ".jpg")
 
             # read the guisettings file to get all skin settings
-            from backuprestore import BackupRestore
+            from resources.lib.backuprestore import BackupRestore
             skinsettingslist = BackupRestore().get_skinsettings(
                 ["color", "opacity", "texture", "panel", "colour", "background", "image"])
             newlist = []
