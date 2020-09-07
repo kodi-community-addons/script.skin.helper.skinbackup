@@ -148,14 +148,22 @@ class ColorThemes():
             zip_temp = try_encode('special://temp/%s.zip' % backup_name)
             xbmcvfs.delete(zip_temp)
             xbmcvfs.delete(backupfile)
-            zip_temp = xbmc.translatePath(zip_temp).decode("utf-8")
-            zip_file = zipfile.ZipFile(zip_temp, "w", zipfile.ZIP_DEFLATED)
-            abs_src = os.path.abspath(xbmc.translatePath(self.userthemes_path).decode("utf-8"))
+            if sys.version_info.major == 3:
+                zip_temp = xbmcvfs.translatePath(zip_temp).decode("utf-8")
+                zip_file = zipfile.ZipFile(zip_temp, "w", zipfile.ZIP_DEFLATED)
+                abs_src = os.path.abspath(xbmcvfs.translatePath(self.userthemes_path).decode("utf-8"))
+            else:
+                zip_temp = xbmc.translatePath(zip_temp).decode("utf-8")
+                zip_file = zipfile.ZipFile(zip_temp, "w", zipfile.ZIP_DEFLATED)
+                abs_src = os.path.abspath(xbmc.translatePath(self.userthemes_path).decode("utf-8"))
             for filename in xbmcvfs.listdir(self.userthemes_path)[1]:
                 if (filename.startswith("%s_" % themename) or
                         filename.replace(".theme", "").replace(".jpg", "") == themename):
                     filename = filename.decode("utf-8")
-                    filepath = xbmc.translatePath(self.userthemes_path + filename).decode("utf-8")
+                    if sys.version_info.major == 3:
+                        filepath = xbmcvfs.translatePath(self.userthemes_path + filename).decode("utf-8")
+                    else:
+                        filepath = xbmc.translatePath(self.userthemes_path + filename).decode("utf-8")
                     absname = os.path.abspath(filepath)
                     arcname = absname[len(abs_src) + 1:]
                     zip_file.write(absname, arcname)
