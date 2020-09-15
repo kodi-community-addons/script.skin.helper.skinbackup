@@ -38,12 +38,14 @@ class ColorThemes():
         '''show dialog with all available color themes'''
         listitems = []
         # create item
-        listitem = xbmcgui.ListItem(label=self.addon.getLocalizedString(32035), iconImage="DefaultAddonSkin.png")
+        listitem = xbmcgui.ListItem(label=self.addon.getLocalizedString(32035))
+        listitem.setArt({"icon": "DefaultAddonSkin.png"})
         listitem.setLabel2(self.addon.getLocalizedString(32036))
         listitem.setPath("add")
         listitems.append(listitem)
         # import item
-        listitem = xbmcgui.ListItem(label=self.addon.getLocalizedString(32037), iconImage="DefaultAddonSkin.png")
+        listitem = xbmcgui.ListItem(label=self.addon.getLocalizedString(32037))
+        listitem.setArt({"icon": "DefaultAddonSkin.png"})
         listitem.setLabel2(self.addon.getLocalizedString(32038))
         listitem.setPath("import")
         listitems.append(listitem)
@@ -213,7 +215,8 @@ class ColorThemes():
 
                 if label == self.get_activetheme():
                     desc = xbmc.getLocalizedString(461)
-                listitem = xbmcgui.ListItem(label, iconImage=icon)
+                listitem = xbmcgui.ListItem(label)
+                listitem.setArt({"icon": icon})
                 listitem.setLabel2(desc)
                 listitem.setPath(themefile)
                 listitems.append(listitem)
@@ -233,7 +236,8 @@ class ColorThemes():
                 desc = "user defined theme"
                 if label == self.get_activetheme():
                     desc = xbmc.getLocalizedString(461)
-                listitem = xbmcgui.ListItem(label, iconImage=icon)
+                listitem = xbmcgui.ListItem(label)
+                listitem.setArt({"icon": icon})
                 listitem.setLabel2(desc)
                 listitem.setPath(themefile)
                 listitems.append(listitem)

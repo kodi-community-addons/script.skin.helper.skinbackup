@@ -127,7 +127,8 @@ class BackupRestore:
 
         # create backup option
         label = self.addon.getLocalizedString(32013)
-        listitem = xbmcgui.ListItem(label=label, iconImage="DefaultFolder.png")
+        listitem = xbmcgui.ListItem(label=label)
+        listitem.setArt({"icon": "DefaultFolder.png"})
         listitem.setPath("backup")
         listitems.append(listitem)
 
@@ -138,7 +139,8 @@ class BackupRestore:
                 backupfile = try_decode(backupfile)
                 if "Skinbackup" in backupfile and backupfile.endswith(".zip"):
                     label = "%s: %s" % (self.addon.getLocalizedString(32015), backupfile)
-                    listitem = xbmcgui.ListItem(label=label, iconImage="DefaultFile.png")
+                    listitem = xbmcgui.ListItem(label=label)
+                    listitem.setArt({"icon": "DefaultFile.png"})
                     listitem.setPath(backuppath + backupfile)
                     listitems.append(listitem)
 
