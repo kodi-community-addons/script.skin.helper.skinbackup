@@ -41,7 +41,7 @@ class BackupRestore:
 
         # create temp path
         temp_path = self.create_temp()
-        zip_temp = try_encode('%s/skinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d %H.%M')))
+        zip_temp = try_encode('%sskinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d %H.%M')))
         temp_path = temp_path + "skinbackup/"
 
         # backup skinshortcuts preferences
@@ -60,7 +60,7 @@ class BackupRestore:
             zip_temp = try_decode(xbmc.translatePath(zip_temp))
         zip_tofile(temp_path, zip_temp)
 
-        # copy file to destination - wait untill it's really copied
+        # copy file to destination - wait until it's really copied
         copy_file(zip_temp, backup_file, True)
 
         # cleanup temp
@@ -135,10 +135,10 @@ class BackupRestore:
         # list existing backups
         backuppath = self.get_backuppath()
         if backuppath:
-            for backupfile in xbmcvfs.listdir(backuppath)[1]:
+            for backupfile in sorted(xbmcvfs.listdir(backuppath)[1], reverse=True):
                 backupfile = try_decode(backupfile)
                 if "Skinbackup" in backupfile and backupfile.endswith(".zip"):
-                    label = "%s: %s" % (self.addon.getLocalizedString(32015), backupfile)
+                    label = "%s: %s" % (self.addon.getLocalizedString(32015), backupfile[26:-5])
                     listitem = xbmcgui.ListItem(label=label)
                     listitem.setArt({"icon": "DefaultFile.png"})
                     listitem.setPath(backuppath + backupfile)
@@ -157,12 +157,12 @@ class BackupRestore:
                 # show settings
                 xbmc.executebuiltin("Addon.OpenSettings(%s)" % ADDON_ID)
             else:
-                if result.getfilename() == "backup":
+                if result.getPath() == "backup":
                     # create new backup
                     self.backup(backup_file=self.get_backupfilename())
                 else:
                     # restore backup
-                    self.restore(try_decode(result.getfilename()))
+                    self.restore(try_decode(result.getPath()))
                 # always open the dialog again
                 self.backuprestore()
 
