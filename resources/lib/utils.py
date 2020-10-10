@@ -189,7 +189,7 @@ def add_tozip(src, zip_file, abs_src):
 def zip_tofile(src, dst):
     '''method to create a zip file from all files/dirs in a path'''
     #Android alternative zipfile check https://forum.kodi.tv/showthread.php?tid=219745
-    if xbmc.getCondVisibility('system.platform.linux') and xbmc.getCondVisibility('system.platform.android'):
+    if xbmc.getCondVisibility('system.platform.linux') and xbmc.getCondVisibility('system.platform.android') and sys.version_info.major < 3:
         from . import zipfile
     else:
         import zipfile
@@ -206,7 +206,7 @@ def unzip_fromfile(zip_path, dest_path):
     '''method to unzip a zipfile to a destination path'''
     import shutil
     #Android alternative zipfile check https://forum.kodi.tv/showthread.php?tid=219745
-    if xbmc.getCondVisibility('system.platform.linux') and xbmc.getCondVisibility('system.platform.android'):
+    if xbmc.getCondVisibility('system.platform.linux') and xbmc.getCondVisibility('system.platform.android') and sys.version_info.major < 3:
         from . import zipfile
     else:
         import zipfile
