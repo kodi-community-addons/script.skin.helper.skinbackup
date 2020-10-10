@@ -288,7 +288,7 @@ class ColorThemes():
                 if setting not in settingslist:
                     settingslist.add(setting)
                     if skinsetting[0] == "string":
-                        if skinsetting[2] is not "":
+                        if skinsetting[2] != "":
                             xbmc.executebuiltin("Skin.SetString(%s,%s)" % (setting, skinsetting[2]))
                         else:
                             xbmc.executebuiltin("Skin.Reset(%s)" % setting)
