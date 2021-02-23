@@ -8,7 +8,7 @@
 
 from resources.lib.colorthemes import ColorThemes
 from resources.lib.backuprestore import BackupRestore
-from resources.lib.utils import log_msg, try_decode, try_encode
+from resources.lib.utils import log_msg
 import xbmc
 import _strptime
 

@@ -32,8 +32,6 @@ class Main():
                     log_msg("No such action: %s" % action, xbmc.LOGWARNING)
         except Exception as exc:
             log_exception(__name__, exc)
-        finally:
-            xbmc.executebuiltin("dialog.Close(busydialog)")
 
     def backup(self):
         '''backup skin settings to file'''
