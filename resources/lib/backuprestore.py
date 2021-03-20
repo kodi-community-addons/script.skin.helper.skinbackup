@@ -41,7 +41,7 @@ class BackupRestore:
 
         # create temp path
         temp_path = self.create_temp()
-        zip_temp = '%s/skinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d %H.%M'))
+        zip_temp = '%sskinbackup-%s.zip' % (temp_path, datetime.now().strftime('%Y-%m-%d'))
         temp_path = temp_path + "skinbackup/"
 
         # backup skinshortcuts preferences
@@ -58,11 +58,11 @@ class BackupRestore:
         zip_tofile(temp_path, zip_temp)
 
         # copy file to destination - wait untill it's really copied
-        copy_file(zip_temp, backup_file, True)
+        copy_file(zip_temp, backup_file)
 
         # cleanup temp
         recursive_delete_dir(temp_path)
-        xbmcvfs.delete(zip_temp)
+        #xbmcvfs.delete(zip_temp)
 
         # show success message
         if not silent:
@@ -90,7 +90,7 @@ class BackupRestore:
                 skinsettingsfile = temp_path + "guisettings.txt"
                 if progressdialog:
                     progressdialog.update(0, "unpacking backup...")
-                zip_temp = u'%sskinbackup-%s.zip' % (ADDON_DATA, datetime.now().strftime('%Y-%m-%d-%H-%M'))
+                zip_temp = '%sskinbackup-%s.zip' % (ADDON_DATA, datetime.now().strftime('%Y-%m-%d'))
                 copy_file(filename, zip_temp, True)
                 unzip_fromfile(zip_temp, temp_path)
                 delete_file(zip_temp)
@@ -121,7 +121,7 @@ class BackupRestore:
         # create backup option
         label = self.addon.getLocalizedString(32013)
         listitem = xbmcgui.ListItem(label=label)
-        listitem.setArt({'icon': "DefaultFolder.png"})
+        listitem.setArt({'icon': "defaultfolder.png"})
         listitem.setPath("backup")
         listitems.append(listitem)
 
@@ -150,12 +150,12 @@ class BackupRestore:
                 # show settings
                 xbmc.executebuiltin("Addon.OpenSettings(%s)" % ADDON_ID)
             else:
-                if result.getfilename() == "backup":
+                if result.getLabel() == "Create new backup":
                     # create new backup
                     self.backup(backup_file=self.get_backupfilename())
                 else:
                     # restore backup
-                    self.restore(result.getfilename())
+                    self.restore(result.getLabel())
                 # always open the dialog again
                 self.backuprestore()
 
@@ -178,7 +178,7 @@ class BackupRestore:
 
     def backup_skinshortcuts(self, dest_path):
         '''backup skinshortcuts including images'''
-        source_path = u'special://profile/addon_data/script.skinshortcuts/'
+        source_path = 'special://profile/addon_data/script.skinshortcuts/'
         if not xbmcvfs.exists(dest_path):
             xbmcvfs.mkdir(dest_path)
         for file in xbmcvfs.listdir(source_path)[1]:
@@ -277,17 +277,17 @@ class BackupRestore:
         '''get the filename for the new backup'''
         backupfile = "%s Skinbackup (%s)" % (
                 get_skin_name().capitalize(),
-                datetime.now().strftime('%Y-%m-%d %H.%M.%S'))
+                datetime.now().strftime('%Y-%m-%d'))
         if promptfilename:
             header = self.addon.getLocalizedString(32003)
-            backupfile = xbmcgui.Dialog().input(header, backupfile).decode
+            backupfile = xbmcgui.Dialog().input(header, backupfile)
         backupfile += ".zip"
         return self.get_backuppath() + backupfile
 
     @staticmethod
     def create_temp():
         '''create temp folder for skin backup/restore'''
-        temp_path = u'%stemp/' % ADDON_DATA
+        temp_path = '%stemp/' % ADDON_DATA
         # workaround weird slashes behaviour on some platforms.
         temp_path = temp_path.replace("//","/").replace("special:/","special://")
         if xbmcvfs.exists(temp_path):
@@ -369,7 +369,7 @@ class BackupRestore:
         '''restore skinshortcuts files'''
         source_path = temp_path + "skinshortcuts/"
         if xbmcvfs.exists(source_path):
-            dest_path = u'special://profile/addon_data/script.skinshortcuts/'
+            dest_path = 'special://profile/addon_data/script.skinshortcuts/'
             for filename in xbmcvfs.listdir(source_path)[1]:
                 filename = filename
                 sourcefile = source_path + filename
