@@ -62,7 +62,7 @@ class ColorThemes():
         result = dialog.result
         del dialog
         if result:
-            themefile = result.getLabel()
+            themefile = result.getPath()
             themename = result.getLabel()
             has_icon = xbmcvfs.exists(themefile.replace(".theme", ".jpg"))
             if themefile == "add":
@@ -115,7 +115,7 @@ class ColorThemes():
         result = dialog.result
         del dialog
         if result:
-            themefile = result.getLabel()
+            themefile = result.getPath()
             themename = result.getLabel()
             self.set_day_night_theme(dayornight, themename, themefile)
 
@@ -131,11 +131,11 @@ class ColorThemes():
             check_date = datetime(*(time.strptime(timevalue, "%H:%M")[0:6]))
             del check_date
             base_setting = "SkinHelper.ColorTheme.%s" % dayornight
-            xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, try_encode(themename)))
+            xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, themename.encode("utf-8")))
             xbmc.executebuiltin("Skin.SetString(%s.time,%s)" % (base_setting, timevalue))
-            label = "%s  (%s %s)" % (try_encode(themename), self.addon.getLocalizedString(32019), timevalue)
+            label = "%s  (%s %s)" % (themename.encode("utf-8"), self.addon.getLocalizedString(32019), timevalue)
             xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (base_setting, label))
-            xbmc.executebuiltin("Skin.SetString(%s.file,%s)" % (base_setting, try_encode(themefile)))
+            xbmc.executebuiltin("Skin.SetString(%s.file,%s)" % (base_setting, themefile.encode("utf-8")))
         except Exception as exc:
             log_exception(__name__, exc)
             xbmcgui.Dialog().ok(xbmc.getLocalizedString(329), self.addon.getLocalizedString(32018))
@@ -145,9 +145,9 @@ class ColorThemes():
         import zipfile
         backup_path = xbmcgui.Dialog().browse(3, self.addon.getLocalizedString(32029), "files")
         if backup_path:
-            backup_name = try_encode("%s ColorTheme - %s" % (get_skin_name().capitalize(), themename))
-            backupfile = os.path.join(backup_path, backup_name + try_encode(".zip"))
-            zip_temp = try_encode('special://temp/%s.zip' % backup_name)
+            backup_name = "%s ColorTheme - %s" % (get_skin_name().capitalize(), themename)
+            backupfile = os.path.join(backup_path, backup_name + ".zip")
+            zip_temp = 'special://temp/%s.zip' % backup_name
             xbmcvfs.delete(zip_temp)
             xbmcvfs.delete(backupfile)
             zip_temp = xbmcvfs.translatePath(zip_temp)
@@ -272,8 +272,6 @@ class ColorThemes():
                 continue
             else:
                 setting = skinsetting[1]
-                if isinstance(setting):
-                    setting = setting.encode("utf-8")
                 if setting not in settingslist:
                     settingslist.add(setting)
                     if skinsetting[0] == "string":
@@ -302,8 +300,8 @@ class ColorThemes():
         if zip_path and zip_path.endswith(".zip"):
 
             # create temp path
-            temp_path = try_encode('special://temp/skinbackup/')
-            temp_zip = try_encode("special://temp/colortheme.zip")
+            temp_path = 'special://temp/skinbackup/'
+            temp_zip = "special://temp/colortheme.zip"
             if xbmcvfs.exists(temp_path):
                 recursive_delete_dir(temp_path)
             xbmcvfs.mkdir(temp_path)
@@ -339,7 +337,7 @@ class ColorThemes():
             if not themename:
                 return
 
-            xbmc.executebuiltin("Skin.SetString(SkinHelper.LastColorTheme,%s)" % try_encode(themename))
+            xbmc.executebuiltin("Skin.SetString(SkinHelper.LastColorTheme,%s)" % themename.encode("utf-8"))
 
             # add screenshot
             custom_thumbnail = xbmcgui.Dialog().browse(2, self.addon.getLocalizedString(32024), 'files')
