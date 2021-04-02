@@ -131,11 +131,11 @@ class ColorThemes():
             check_date = datetime(*(time.strptime(timevalue, "%H:%M")[0:6]))
             del check_date
             base_setting = "SkinHelper.ColorTheme.%s" % dayornight
-            xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, themename.encode("utf-8")))
+            xbmc.executebuiltin("Skin.SetString(%s.theme,%s)" % (base_setting, themename))
             xbmc.executebuiltin("Skin.SetString(%s.time,%s)" % (base_setting, timevalue))
-            label = "%s  (%s %s)" % (themename.encode("utf-8"), self.addon.getLocalizedString(32019), timevalue)
+            label = "%s  (%s %s)" % (themename, self.addon.getLocalizedString(32019), timevalue)
             xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (base_setting, label))
-            xbmc.executebuiltin("Skin.SetString(%s.file,%s)" % (base_setting, themefile.encode("utf-8")))
+            xbmc.executebuiltin("Skin.SetString(%s.file,%s)" % (base_setting, themefile))
         except Exception as exc:
             log_exception(__name__, exc)
             xbmcgui.Dialog().ok(xbmc.getLocalizedString(329), self.addon.getLocalizedString(32018))
