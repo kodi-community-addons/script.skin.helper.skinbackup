@@ -1,9 +1,38 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="32000">
-        <setting id="backup_path" type="folder" option="writeable" source="files" label="32001" default="special://profile/addon_data/script.skin.helper.skinbackup/" />
-        <setting id="auto_backups" type="bool" label="32032" default="false"/>
-        <setting id="max_old_backups" type="number" label="32034" default="10" visible="eq(-1,true)"/>
-    </category>
-
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="script.skin.helper.skinbackup">
+		<category id="general" label="32000" help="">
+			<group id="1">
+				<setting id="backup_path" type="path" label="32001" help="">
+					<level>0</level>
+					<default>special://profile/addon_data/script.skin.helper.skinbackup/</default>
+					<constraints>
+						<sources>
+							<source>files</source>
+						</sources>
+					</constraints>
+					<control type="button" format="path">
+						<heading>32001</heading>
+					</control>
+				</setting>
+				<setting id="auto_backups" type="boolean" label="32032" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="max_old_backups" type="integer" label="32034" help="">
+					<level>0</level>
+					<default>10</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="auto_backups">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="integer">
+						<heading>32034</heading>
+					</control>
+				</setting>
+			</group>
+		</category>
+	</section>
 </settings>
